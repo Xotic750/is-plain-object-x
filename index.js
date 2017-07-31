@@ -1,6 +1,6 @@
 /**
  * @file Tests if a value is a plain object.
- * @version 1.0.0
+ * @version 1.1.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -14,63 +14,95 @@ var isPrimitive = require('is-primitive');
 var isArguments = require('is-arguments');
 var getPrototypeOf = require('get-prototype-of-x');
 var isNull = require('lodash.isnull');
-
-var isProtoOf = Object.prototype.isPrototypeOf;
-var $isPrototypeOf = function isPrototypeOf(proto, object) {
-  return isProtoOf.call(proto, object);
-};
-
-var element = typeof document !== 'undefined' && document.createElement('div');
-var hasChildNodes = element && element.hasChildNodes;
-var $isNode = function isNode(value) {
-  if (hasChildNodes) {
-    try {
-      return typeof hasChildNodes.call(value) === 'boolean';
-    } catch (ignore) {}
-  }
-
-  return false;
-};
-
+var isNil = require('is-nil-x');
+var isNode = require('is-node-x');
+var hasOwnProperty = require('has-own-property-x');
+var isPrototypeOf = require('is-prototype-of-x');
 var objectTag = '[object Object]';
-var tagRx;
-if (element && toStringTag(element) === objectTag) {
-  try {
-    var stringElement = String(element);
-    tagRx = new RegExp('^\\[object[' + require('white-space-x').string + ']+[\\s\\S]+\\]$');
-    if (tagRx.test(stringElement) === false) {
-      throw new Error('Not stringTag');
+
+var testNode = typeof document !== 'undefined' && toStringTag(document) === objectTag;
+var testArguments = (function () {
+  return toStringTag(arguments) === objectTag;
+}());
+
+var $isFunctionType = function isFunctionType(value) {
+  return typeof value === 'function';
+};
+
+/**
+ * Checks if `value` is a host object in IE < 9.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+ */
+var $isHostObject;
+if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
+  $isHostObject = function isHostObject(value) {
+    // Many host objects are `Object` objects that can coerce to strings
+    // despite having improperly defined `toString` methods.
+    if (isNil(value) === false && $isFunctionType(value.toString) === false) {
+      try {
+        return Boolean(String(value));
+      } catch (ignore) {}
     }
-  } catch (ignore) {
-    tagRx = null;
-  }
+
+    return false;
+  };
 }
 
 var $isObjectObject = function isObjectObject(value) {
-  var stringTag = toStringTag(value);
-  var altStringTag;
-  if (tagRx && stringTag === objectTag) {
-    if (isArguments(value) || $isNode(value)) {
-      return false;
-    }
+  if (isPrimitive(value) || $isFunctionType(value) || toStringTag(value) !== objectTag) {
+    return false;
+  }
 
+  if (testArguments && isArguments(value)) {
+    return false;
+  }
+
+  if (testNode && isNode(value)) {
+    return false;
+  }
+
+  if ($isHostObject && $isHostObject(value)) {
+    return false;
+  }
+
+  return true;
+};
+
+var $funcToString = function funcToString(value) {
+  if (isPrimitive(value) === false) {
     try {
-      var string = String(value);
-      altStringTag = tagRx.test(string) && string;
+      return Function.prototype.toString.call(value);
     } catch (ignore) {}
   }
 
-  return (altStringTag || stringTag) === objectTag;
+  return void 0;
 };
 
+var objectCtorString = $funcToString(Object);
 var obj = {};
 var $isPlainObject = function isPlainObject(value) {
-  if (isPrimitive(value) || $isObjectObject(value) === false) {
+  if ($isObjectObject(value) === false) {
     return false;
   }
 
   var proto = getPrototypeOf(value);
-  return isNull(proto) || $isPrototypeOf(proto, obj);
+  if (isNull(proto)) {
+    return true;
+  }
+
+  if ($isObjectObject(proto) === false) {
+    return false;
+  }
+
+  if (isPrototypeOf(proto, obj)) {
+    return true;
+  }
+
+  var Ctor = hasOwnProperty(proto, 'constructor') && proto.constructor;
+  return $isFunctionType(Ctor) && Ctor instanceof Ctor && $funcToString(Ctor) === objectCtorString;
 };
 
 /**
@@ -86,7 +118,7 @@ var $isPlainObject = function isPlainObject(value) {
  *  this.a = 1;
  * }
  *
- * isPlainObject(new Foo); // => false
+ * isPlainObject(new Foo()); // => false
  * isPlainObject([1, 2, 3]); // => false
  * isPlainObject({ 'x': 0, 'y': 0 }); // => true
  * isPlainObject(Object.create(null)); // => true

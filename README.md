@@ -23,7 +23,7 @@
 ## is-plain-object-x
 Tests if a value is a plain object.
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Author**: Xotic750 <Xotic750@gmail.com>  
 **License**: [MIT](&lt;https://opensource.org/licenses/MIT&gt;)  
 **Copyright**: Xotic750  
@@ -48,7 +48,7 @@ function Foo() {
  this.a = 1;
 }
 
-isPlainObject(new Foo); // => false
+isPlainObject(new Foo()); // => false
 isPlainObject([1, 2, 3]); // => false
 isPlainObject({ 'x': 0, 'y': 0 }); // => true
 isPlainObject(Object.create(null)); // => true

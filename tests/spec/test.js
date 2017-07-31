@@ -24,27 +24,25 @@ if (typeof module === 'object' && module.exports) {
 var itWindow = typeof window === 'undefined' ? xit : it;
 var itGlobal = typeof global === 'undefined' ? xit : it;
 
-var element = typeof document !== 'undefined' && document.createElement('div');
+var element;
+try {
+  element = typeof document !== 'undefined' && document.createElement('div');
+} catch (ignore) {}
 var itElement = element ? it : xit;
 
-var hasSymbolSupport;
 var symbol;
 if (typeof Symbol === 'function') {
   symbol = Symbol('');
-  hasSymbolSupport = typeof symbol === 'symbol';
 }
-var itSymbol = hasSymbolSupport ? it : xit;
+var itSymbol = typeof symbol === 'symbol' ? it : xit;
 
 var itMap = typeof Map === 'function' ? it : xit;
 var itSet = typeof Set === 'function' ? it : xit;
 
 var workingGPO;
 if (Object.getPrototypeOf) {
-  var obj = { constructor: function () {} };
-  var proto = Object.getPrototypeOf(obj);
-  workingGPO = proto === Object.prototype;
+  workingGPO = Object.getPrototypeOf({ constructor: function () {} }) === Object.prototype;
 }
-
 var itGPOWorks = workingGPO ? it : xit;
 
 var htmlList = [
@@ -151,9 +149,9 @@ describe('isPlainObject', function () {
       return false;
     };
 
-    falsey = new Array(6);
+    falsey = new Array(7);
     falsey[1] = null;
-    falsey[2] = undefined;
+    falsey[2] = void 0;
     falsey[3] = false;
     falsey[4] = 0;
     falsey[5] = NaN;
@@ -269,9 +267,27 @@ describe('isPlainObject', function () {
     expect(isPlainObject(Object(symbol))).toBe(false, 'Object');
   });
 
-  /*
-  itRealm('should work with objects from another realm', function () {
-    expect(isPlainObject(realm.object)).toBe(true);
+  itElement('should work with objects from another realm', function () {
+    var GetFromIFrame = function (name) {
+      var iframe = document.createElement('iframe');
+      var parent = document.body || document.documentElement;
+      var value;
+
+      iframe.style.display = 'none';
+      parent.appendChild(iframe);
+      // eslint-disable-next-line no-script-url
+      iframe.src = 'javascript:';
+
+      value = iframe.contentWindow[name];
+      parent.removeChild(iframe);
+      iframe = null;
+
+      return value;
+    };
+
+    var xobj = new GetFromIFrame('Object')();
+    expect(isPlainObject(xobj)).toBe(true);
+    var xarr = new GetFromIFrame('Array')();
+    expect(isPlainObject(xarr)).toBe(false);
   });
-  */
 });
