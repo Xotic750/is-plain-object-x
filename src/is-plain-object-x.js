@@ -7,25 +7,24 @@
  * @module is-plain-object-x
  */
 
-'use strict';
+const toStringTag = require('to-string-tag-x');
+const isPrimitive = require('is-primitive');
+const isArguments = require('is-arguments');
+const getPrototypeOf = require('get-prototype-of-x');
+const isNull = require('lodash.isnull');
+const isNil = require('is-nil-x');
+const isNode = require('is-node-x');
+const hasOwnProperty = require('has-own-property-x');
+const isPrototypeOf = require('is-prototype-of-x');
 
-var toStringTag = require('to-string-tag-x');
-var isPrimitive = require('is-primitive');
-var isArguments = require('is-arguments');
-var getPrototypeOf = require('get-prototype-of-x');
-var isNull = require('lodash.isnull');
-var isNil = require('is-nil-x');
-var isNode = require('is-node-x');
-var hasOwnProperty = require('has-own-property-x');
-var isPrototypeOf = require('is-prototype-of-x');
-var objectTag = '[object Object]';
+const objectTag = '[object Object]';
 
-var testNode = typeof document !== 'undefined' && toStringTag(document) === objectTag;
-var testArguments = (function () {
+const testNode = typeof document !== 'undefined' && toStringTag(document) === objectTag;
+const testArguments = (function() {
   return toStringTag(arguments) === objectTag;
-}());
+})();
 
-var $isFunctionType = function isFunctionType(value) {
+const $isFunctionType = function isFunctionType(value) {
   return typeof value === 'function';
 };
 
@@ -33,10 +32,11 @@ var $isFunctionType = function isFunctionType(value) {
  * Checks if `value` is a host object in IE < 9.
  *
  * @private
- * @param {*} value The value to check.
+ * @param {*} value - The value to check.
  * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
  */
-var $isHostObject;
+let $isHostObject;
+
 if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
   $isHostObject = function isHostObject(value) {
     // Many host objects are `Object` objects that can coerce to strings
@@ -51,7 +51,7 @@ if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
   };
 }
 
-var $isObjectObject = function isObjectObject(value) {
+const $isObjectObject = function isObjectObject(value) {
   if (isPrimitive(value) || $isFunctionType(value) || toStringTag(value) !== objectTag) {
     return false;
   }
@@ -71,7 +71,7 @@ var $isObjectObject = function isObjectObject(value) {
   return true;
 };
 
-var $funcToString = function funcToString(value) {
+const $funcToString = function funcToString(value) {
   if (isPrimitive(value) === false) {
     try {
       return Function.prototype.toString.call(value);
@@ -81,14 +81,15 @@ var $funcToString = function funcToString(value) {
   return void 0;
 };
 
-var objectCtorString = $funcToString(Object);
-var obj = {};
-var $isPlainObject = function isPlainObject(value) {
+const objectCtorString = $funcToString(Object);
+const obj = {};
+const $isPlainObject = function isPlainObject(value) {
   if ($isObjectObject(value) === false) {
     return false;
   }
 
-  var proto = getPrototypeOf(value);
+  const proto = getPrototypeOf(value);
+
   if (isNull(proto)) {
     return true;
   }
@@ -101,7 +102,8 @@ var $isPlainObject = function isPlainObject(value) {
     return true;
   }
 
-  var Ctor = hasOwnProperty(proto, 'constructor') && proto.constructor;
+  const Ctor = hasOwnProperty(proto, 'constructor') && proto.constructor;
+
   return $isFunctionType(Ctor) && Ctor instanceof Ctor && $funcToString(Ctor) === objectCtorString;
 };
 
@@ -109,8 +111,8 @@ var $isPlainObject = function isPlainObject(value) {
  * This method tests if `value` is a plain object, that is, an object created by
  * the `Object` constructor or one with a `[[Prototype]]` of `null`.
  *
- * @param {*} value The value to test.
- * @return {boolean} True if a plain object, otherwise false.
+ * @param {*} value - The value to test.
+ * @returns {boolean} True if a plain object, otherwise false.
  * @example
  * var isPlainObject = require('is-plain-object-x');
  *

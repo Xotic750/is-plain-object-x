@@ -1,17 +1,19 @@
-'use strict';
+let isPlainObject;
 
-var isPlainObject;
 if (typeof module === 'object' && module.exports) {
   require('es5-shim');
   require('es5-shim/es5-sham');
+
   if (typeof JSON === 'undefined') {
     JSON = {};
   }
+
   require('json3').runInContext(null, JSON);
   require('es6-shim');
-  var es7 = require('es7-shim');
-  Object.keys(es7).forEach(function (key) {
-    var obj = es7[key];
+  const es7 = require('es7-shim');
+  Object.keys(es7).forEach(function(key) {
+    const obj = es7[key];
+
     if (typeof obj.shim === 'function') {
       obj.shim();
     }
@@ -21,31 +23,36 @@ if (typeof module === 'object' && module.exports) {
   isPlainObject = returnExports;
 }
 
-var itWindow = typeof window === 'undefined' ? xit : it;
-var itGlobal = typeof global === 'undefined' ? xit : it;
+const itWindow = typeof window === 'undefined' ? xit : it;
+const itGlobal = typeof global === 'undefined' ? xit : it;
 
-var element;
+let element;
 try {
   element = typeof document !== 'undefined' && document.createElement('div');
 } catch (ignore) {}
-var itElement = element ? it : xit;
 
-var symbol;
+const itElement = element ? it : xit;
+
+let symbol;
+
 if (typeof Symbol === 'function') {
   symbol = Symbol('');
 }
-var itSymbol = typeof symbol === 'symbol' ? it : xit;
 
-var itMap = typeof Map === 'function' ? it : xit;
-var itSet = typeof Set === 'function' ? it : xit;
+const itSymbol = typeof symbol === 'symbol' ? it : xit;
 
-var workingGPO;
+const itMap = typeof Map === 'function' ? it : xit;
+const itSet = typeof Set === 'function' ? it : xit;
+
+let workingGPO;
+
 if (Object.getPrototypeOf) {
-  workingGPO = Object.getPrototypeOf({ constructor: function () {} }) === Object.prototype;
+  workingGPO = Object.getPrototypeOf({constructor() {}}) === Object.prototype;
 }
-var itGPOWorks = workingGPO ? it : xit;
 
-var htmlList = [
+const itGPOWorks = workingGPO ? it : xit;
+
+const htmlList = [
   'A',
   'ABBR',
   'ACRONYM',
@@ -136,16 +143,16 @@ var htmlList = [
   'TT',
   'U',
   'UL',
-  'VAR'
+  'VAR',
 ];
 
-describe('isPlainObject', function () {
-  var alwaysFalse;
-  var falsey;
-  var Foo;
+describe('isPlainObject', function() {
+  let alwaysFalse;
+  let falsey;
+  let Foo;
 
-  beforeEach(function () {
-    alwaysFalse = function () {
+  beforeEach(function() {
+    alwaysFalse = function() {
       return false;
     };
 
@@ -158,120 +165,116 @@ describe('isPlainObject', function () {
     falsey[6] = '';
 
     // eslint-disable-next-line no-unused-vars
-    Foo = function (a) {
+    Foo = function(a) {
       this.a = 1;
     };
   });
 
-  it('is a function', function () {
+  it('is a function', function() {
     expect(typeof isPlainObject).toBe('function');
   });
 
-  it('should detect plain objects', function () {
+  it('should detect plain objects', function() {
     expect(isPlainObject({})).toBe(true, 'Literal');
     // eslint-disable-next-line no-new-object
     expect(isPlainObject(new Object())).toBe(true, 'new Object');
-    expect(isPlainObject({ a: 1 })).toBe(true, 'Literal with property');
-    expect(isPlainObject([
-      1,
-      2,
-      3
-    ])).toBe(false, 'Literal array');
+    expect(isPlainObject({a: 1})).toBe(true, 'Literal with property');
+    expect(isPlainObject([1, 2, 3])).toBe(false, 'Literal array');
     expect(isPlainObject(new Foo(1))).toBe(false, 'Function object');
   });
 
-  itGPOWorks('should detect plain objects with constructor property', function () {
-    expect(isPlainObject({ constructor: Foo })).toBe(true, 'Literal with constructor');
+  itGPOWorks('should detect plain objects with constructor property', function() {
+    expect(isPlainObject({constructor: Foo})).toBe(true, 'Literal with constructor');
   });
 
-  it('should return `true` for objects with a `[[Prototype]]` of `null`', function () {
-    var object = Object.create(null);
+  it('should return `true` for objects with a `[[Prototype]]` of `null`', function() {
+    const object = Object.create(null);
     expect(isPlainObject(object)).toBe(true);
 
     object.constructor = Object.prototype.constructor;
     expect(isPlainObject(object)).toBe(true);
   });
 
-  it('should return `true` for plain objects with a custom `valueOf` property', function () {
-    expect(isPlainObject({ valueOf: 0 })).toBe(true);
+  it('should return `true` for plain objects with a custom `valueOf` property', function() {
+    expect(isPlainObject({valueOf: 0})).toBe(true);
   });
 
-  itElement('should return `true` for DOM objects with a custom `valueOf` property', function () {
+  itElement('should return `true` for DOM objects with a custom `valueOf` property', function() {
     element.valueOf = 0;
 
     expect(isPlainObject(element)).toBe(false);
   });
 
-  it('should return `false` for objects with a custom `[[Prototype]]`', function () {
-    var object = Object.create({ a: 1 });
+  it('should return `false` for objects with a custom `[[Prototype]]`', function() {
+    const object = Object.create({a: 1});
     expect(isPlainObject(object)).toBe(false);
   });
 
-  itWindow('should return `false` for window', function () {
+  itWindow('should return `false` for window', function() {
     expect(isPlainObject(window)).toBe(false);
   });
 
-  itGlobal('should return `false` for global', function () {
+  itGlobal('should return `false` for global', function() {
     expect(isPlainObject(global)).toBe(false);
   });
 
-  itElement('should return `false` for DOM elements', function () {
+  itElement('should return `false` for DOM elements', function() {
     expect(isPlainObject(document)).toBe(false);
 
-    var expected = htmlList.map(alwaysFalse);
+    const expected = htmlList.map(alwaysFalse);
 
-    var actual = htmlList.map(function (tag) {
+    const actual = htmlList.map(function(tag) {
       return isPlainObject(document.createElement(tag));
     });
 
-    expect(actual).toEqual(expected);
+    expect(actual).toStrictEqual(expected);
 
-    var textNode = document.createTextNode('Hello');
+    const textNode = document.createTextNode('Hello');
     expect(isPlainObject(textNode)).toBe(false);
   });
 
-  it('should return `false` for Object objects without a `toStringTag` of "Object"', function () {
+  it('should return `false` for Object objects without a `toStringTag` of "Object"', function() {
     expect(isPlainObject(arguments)).toBe(false, 'arguments');
     expect(isPlainObject([])).toBe(false, 'Literal array');
     expect(isPlainObject(new Array(6))).toBe(false, 'new Array');
     expect(isPlainObject(Error)).toBe(false, 'Error constructor');
     expect(isPlainObject(Math)).toBe(false, 'Math object');
     expect(isPlainObject(/regex/)).toBe(false, 'Regex');
-    expect(isPlainObject(function () {})).toBe(false, 'Function');
+    expect(isPlainObject(function() {})).toBe(false, 'Function');
     expect(isPlainObject(new Date())).toBe(false, 'Function');
   });
 
-  it('should return `false` for non-objects', function () {
-    var expected = falsey.map(alwaysFalse);
+  it('should return `false` for non-objects', function() {
+    const expected = falsey.map(alwaysFalse);
 
-    var actual = falsey.map(function (value, index) {
+    const actual = falsey.map(function(value, index) {
       return index ? isPlainObject(value) : isPlainObject();
     });
 
-    expect(actual).toEqual(expected);
+    expect(actual).toStrictEqual(expected);
 
     expect(isPlainObject(true)).toBe(false);
     expect(isPlainObject('a')).toBe(false);
   });
 
-  itMap('should return `false` for Map', function () {
+  itMap('should return `false` for Map', function() {
     expect(isPlainObject(new Map())).toBe(false);
   });
 
-  itSet('should return `false` for Set', function () {
+  itSet('should return `false` for Set', function() {
     expect(isPlainObject(new Set())).toBe(false);
   });
 
-  itSymbol('should return `false` for symbols', function () {
+  itSymbol('should return `false` for symbols', function() {
     expect(isPlainObject(symbol)).toBe(false, 'Literal');
     expect(isPlainObject(Object(symbol))).toBe(false, 'Object');
   });
 
-  itElement('should work with objects from another realm', function () {
-    var GetFromIFrame = function (name) {
-      var iframe = document.createElement('iframe');
-      var parent = document.body || document.documentElement;
-      var value;
+  itElement('should work with objects from another realm', function() {
+    const GetFromIFrame = function(name) {
+      let iframe = document.createElement('iframe');
+      const parent = document.body || document.documentElement;
+      let value;
 
       iframe.style.display = 'none';
       parent.appendChild(iframe);
@@ -285,9 +288,9 @@ describe('isPlainObject', function () {
       return value;
     };
 
-    var xobj = new GetFromIFrame('Object')();
+    const xobj = new GetFromIFrame('Object')();
     expect(isPlainObject(xobj)).toBe(true);
-    var xarr = new GetFromIFrame('Array')();
+    const xarr = new GetFromIFrame('Array')();
     expect(isPlainObject(xarr)).toBe(false);
   });
 });
