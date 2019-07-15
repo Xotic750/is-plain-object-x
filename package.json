@@ -54,7 +54,7 @@
     "is-nil-x": "^2.0.6",
     "is-node-x": "^2.0.4",
     "is-primitive": "^3.0.1",
-    "is-prototype-of-x": "^1.1.0",
+    "is-prototype-of-x": "^2.0.0",
     "lodash.isnull": "^3.0.0",
     "to-string-tag-x": "^2.0.8"
   },
