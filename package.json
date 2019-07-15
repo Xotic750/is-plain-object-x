@@ -51,12 +51,12 @@
     "get-prototype-of-x": "^1.4.0",
     "has-own-property-x": "^3.2.0",
     "is-arguments": "^1.0.4",
-    "is-nil-x": "^2.0.5",
-    "is-node-x": "^2.0.3",
+    "is-nil-x": "^2.0.6",
+    "is-node-x": "^2.0.4",
     "is-primitive": "^3.0.1",
     "is-prototype-of-x": "^1.1.0",
     "lodash.isnull": "^3.0.0",
-    "to-string-tag-x": "^2.0.7"
+    "to-string-tag-x": "^2.0.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",
