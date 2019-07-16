@@ -1,12 +1,3 @@
-/**
- * @file Tests if a value is a plain object.
- * @version 1.1.0
- * @author Xotic750 <Xotic750@gmail.com>
- * @copyright  Xotic750
- * @license {@link <https://opensource.org/licenses/MIT> MIT}
- * @module is-plain-object-x
- */
-
 import toStringTag from 'to-string-tag-x';
 
 import isPrimitive from 'is-primitive';
@@ -114,16 +105,5 @@ const $isPlainObject = function isPlainObject(value) {
  *
  * @param {*} value - The value to test.
  * @returns {boolean} True if a plain object, otherwise false.
- * @example
- * var isPlainObject = require('is-plain-object-x');
- *
- * function Foo() {
- *  this.a = 1;
- * }
- *
- * isPlainObject(new Foo()); // => false
- * isPlainObject([1, 2, 3]); // => false
- * isPlainObject({ 'x': 0, 'y': 0 }); // => true
- * isPlainObject(Object.create(null)); // => true
  */
 export default $isPlainObject;
