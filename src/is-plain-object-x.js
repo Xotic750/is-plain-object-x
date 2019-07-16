@@ -7,15 +7,16 @@
  * @module is-plain-object-x
  */
 
-const toStringTag = require('to-string-tag-x');
-const isPrimitive = require('is-primitive');
-const isArguments = require('is-arguments');
-const getPrototypeOf = require('get-prototype-of-x');
-const isNull = require('lodash.isnull');
-const isNil = require('is-nil-x');
-const isNode = require('is-node-x');
-const hasOwnProperty = require('has-own-property-x');
-const isPrototypeOf = require('is-prototype-of-x');
+import toStringTag from 'to-string-tag-x';
+
+import isPrimitive from 'is-primitive';
+import isArguments from 'is-arguments';
+import getPrototypeOf from 'get-prototype-of-x';
+import isNull from 'lodash.isnull';
+import isNil from 'is-nil-x';
+import isNode from 'is-node-x';
+import hasOwnProperty from 'has-own-property-x';
+import isPrototypeOf from 'is-prototype-of-x';
 
 const objectTag = '[object Object]';
 
@@ -125,4 +126,4 @@ const $isPlainObject = function isPlainObject(value) {
  * isPlainObject({ 'x': 0, 'y': 0 }); // => true
  * isPlainObject(Object.create(null)); // => true
  */
-module.exports = $isPlainObject;
+export default $isPlainObject;

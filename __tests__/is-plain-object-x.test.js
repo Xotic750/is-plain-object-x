@@ -171,10 +171,12 @@ describe('isPlainObject', function() {
   });
 
   it('is a function', function() {
+    expect.assertions(1);
     expect(typeof isPlainObject).toBe('function');
   });
 
   it('should detect plain objects', function() {
+    expect.assertions(1);
     expect(isPlainObject({})).toBe(true, 'Literal');
     // eslint-disable-next-line no-new-object
     expect(isPlainObject(new Object())).toBe(true, 'new Object');
@@ -188,6 +190,7 @@ describe('isPlainObject', function() {
   });
 
   it('should return `true` for objects with a `[[Prototype]]` of `null`', function() {
+    expect.assertions(1);
     const object = Object.create(null);
     expect(isPlainObject(object)).toBe(true);
 
@@ -196,6 +199,7 @@ describe('isPlainObject', function() {
   });
 
   it('should return `true` for plain objects with a custom `valueOf` property', function() {
+    expect.assertions(1);
     expect(isPlainObject({valueOf: 0})).toBe(true);
   });
 
@@ -206,6 +210,7 @@ describe('isPlainObject', function() {
   });
 
   it('should return `false` for objects with a custom `[[Prototype]]`', function() {
+    expect.assertions(1);
     const object = Object.create({a: 1});
     expect(isPlainObject(object)).toBe(false);
   });
@@ -234,6 +239,7 @@ describe('isPlainObject', function() {
   });
 
   it('should return `false` for Object objects without a `toStringTag` of "Object"', function() {
+    expect.assertions(1);
     expect(isPlainObject(arguments)).toBe(false, 'arguments');
     expect(isPlainObject([])).toBe(false, 'Literal array');
     expect(isPlainObject(new Array(6))).toBe(false, 'new Array');
@@ -245,6 +251,7 @@ describe('isPlainObject', function() {
   });
 
   it('should return `false` for non-objects', function() {
+    expect.assertions(1);
     const expected = falsey.map(alwaysFalse);
 
     const actual = falsey.map(function(value, index) {
