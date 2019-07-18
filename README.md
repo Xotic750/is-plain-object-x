@@ -21,35 +21,34 @@
 <a name="module_is-plain-object-x"></a>
 
 ## is-plain-object-x
+
 Tests if a value is a plain object.
 
-**Version**: 1.1.0  
-**Author**: Xotic750 <Xotic750@gmail.com>  
-**License**: [MIT](&lt;https://opensource.org/licenses/MIT&gt;)  
-**Copyright**: Xotic750  
 <a name="exp_module_is-plain-object-x--module.exports"></a>
 
 ### `module.exports` ⇒ <code>boolean</code> ⏏
+
 This method tests if `value` is a plain object, that is, an object created by
 the `Object` constructor or one with a `[[Prototype]]` of `null`.
 
 **Kind**: Exported member  
-**Returns**: <code>boolean</code> - True if a plain object, otherwise false.  
+**Returns**: <code>boolean</code> - True if a plain object, otherwise false.
 
-| Param | Type | Description |
-| --- | --- | --- |
+| Param | Type            | Description        |
+| ----- | --------------- | ------------------ |
 | value | <code>\*</code> | The value to test. |
 
-**Example**  
+**Example**
+
 ```js
-var isPlainObject = require('is-plain-object-x');
+import isPlainObject from 'is-plain-object-x';
 
 function Foo() {
- this.a = 1;
+  this.a = 1;
 }
 
 isPlainObject(new Foo()); // => false
 isPlainObject([1, 2, 3]); // => false
-isPlainObject({ 'x': 0, 'y': 0 }); // => true
+isPlainObject({x: 0, y: 0}); // => true
 isPlainObject(Object.create(null)); // => true
 ```

@@ -6,19 +6,17 @@ import isNil from 'is-nil-x';
 import isNode from 'is-node-x';
 import hasOwnProperty from 'has-own-property-x';
 import isPrototypeOf from 'is-prototype-of-x';
+var objectTag = '[object Object]';
+var testNode = typeof document !== 'undefined' && toStringTag(document) === objectTag;
 
-const objectTag = '[object Object]';
-
-const testNode = typeof document !== 'undefined' && toStringTag(document) === objectTag;
-const testArguments = (function getTestArgs() {
+var testArguments = function getTestArgs() {
   /* eslint-disable-next-line prefer-rest-params */
   return toStringTag(arguments) === objectTag;
-})();
+}();
 
-const $isFunctionType = function isFunctionType(value) {
+var $isFunctionType = function isFunctionType(value) {
   return typeof value === 'function';
 };
-
 /**
  * Checks if `value` is a host object in IE < 9.
  *
@@ -26,7 +24,9 @@ const $isFunctionType = function isFunctionType(value) {
  * @param {*} value - The value to check.
  * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
  */
-let $isHostObject;
+
+
+var $isHostObject;
 
 if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
   $isHostObject = function isHostObject(value) {
@@ -35,8 +35,7 @@ if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
     if (isNil(value) === false && $isFunctionType(value.toString) === false) {
       try {
         return Boolean(String(value));
-      } catch (ignore) {
-        // empty
+      } catch (ignore) {// empty
       }
     }
 
@@ -44,7 +43,7 @@ if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
   };
 }
 
-const $isObjectObject = function isObjectObject(value) {
+var $isObjectObject = function isObjectObject(value) {
   if (isPrimitive(value) || $isFunctionType(value) || toStringTag(value) !== objectTag) {
     return false;
   }
@@ -60,27 +59,28 @@ const $isObjectObject = function isObjectObject(value) {
   return (typeof $isHostObject === 'function' && $isHostObject(value)) === false;
 };
 
-const $funcToString = function funcToString(value) {
+var $funcToString = function funcToString(value) {
   if (isPrimitive(value) === false) {
     try {
       return Function.prototype.toString.call(value);
-    } catch (ignore) {
-      // empty
+    } catch (ignore) {// empty
     }
   }
-
   /* eslint-disable-next-line no-void */
+
+
   return void 0;
 };
 
-const objectCtorString = $funcToString(Object);
-const obj = {};
-const $isPlainObject = function isPlainObject(value) {
+var objectCtorString = $funcToString(Object);
+var obj = {};
+
+var $isPlainObject = function isPlainObject(value) {
   if ($isObjectObject(value) === false) {
     return false;
   }
 
-  const proto = getPrototypeOf(value);
+  var proto = getPrototypeOf(value);
 
   if (proto === null) {
     return true;
@@ -94,11 +94,9 @@ const $isPlainObject = function isPlainObject(value) {
     return true;
   }
 
-  const Ctor = hasOwnProperty(proto, 'constructor') && proto.constructor;
-
+  var Ctor = hasOwnProperty(proto, 'constructor') && proto.constructor;
   return $isFunctionType(Ctor) && Ctor instanceof Ctor && $funcToString(Ctor) === objectCtorString;
 };
-
 /**
  * This method tests if `value` is a plain object, that is, an object created by
  * the `Object` constructor or one with a `[[Prototype]]` of `null`.
@@ -106,4 +104,8 @@ const $isPlainObject = function isPlainObject(value) {
  * @param {*} value - The value to test.
  * @returns {boolean} True if a plain object, otherwise false.
  */
+
+
 export default $isPlainObject;
+
+//# sourceMappingURL=is-plain-object-x.esm.js.map
