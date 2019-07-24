@@ -1,23 +1,31 @@
 <a href="https://travis-ci.org/Xotic750/is-plain-object-x"
-   title="Travis status">
+  title="Travis status">
 <img
-   src="https://travis-ci.org/Xotic750/is-plain-object-x.svg?branch=master"
-   alt="Travis status" height="18"/>
+  src="https://travis-ci.org/Xotic750/is-plain-object-x.svg?branch=master"
+  alt="Travis status" height="18">
 </a>
 <a href="https://david-dm.org/Xotic750/is-plain-object-x"
-   title="Dependency status">
-<img src="https://david-dm.org/Xotic750/is-plain-object-x.svg"
-   alt="Dependency status" height="18"/>
+  title="Dependency status">
+<img src="https://david-dm.org/Xotic750/is-plain-object-x/status.svg"
+  alt="Dependency status" height="18"/>
 </a>
-<a href="https://david-dm.org/Xotic750/is-plain-object-x#info=devDependencies"
-   title="devDependency status">
+<a
+  href="https://david-dm.org/Xotic750/is-plain-object-x?type=dev"
+  title="devDependency status">
 <img src="https://david-dm.org/Xotic750/is-plain-object-x/dev-status.svg"
-   alt="devDependency status" height="18"/>
+  alt="devDependency status" height="18"/>
 </a>
-<a href="https://badge.fury.io/js/is-plain-object-x" title="npm version">
+<a href="https://badge.fury.io/js/is-plain-object-x"
+  title="npm version">
 <img src="https://badge.fury.io/js/is-plain-object-x.svg"
-   alt="npm version" height="18"/>
+  alt="npm version" height="18">
 </a>
+<a href="https://www.jsdelivr.com/package/npm/is-plain-object-x"
+  title="jsDelivr hits">
+<img src="https://data.jsdelivr.com/v1/package/npm/is-plain-object-x/badge?style=rounded"
+  alt="jsDelivr hits" height="18">
+</a>
+
 <a name="module_is-plain-object-x"></a>
 
 ## is-plain-object-x
