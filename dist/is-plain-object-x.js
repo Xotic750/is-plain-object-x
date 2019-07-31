@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-31T20:47:41.118Z",
+  "date": "2019-07-31T23:25:19.175Z",
   "describe": "",
   "description": "Tests if a value is a plain object.",
   "file": "is-plain-object-x.js",
-  "hash": "565d5f9cf1dd73ab3bd5",
+  "hash": "c0d98eb19bf38a6a67d1",
   "license": "MIT",
-  "version": "2.0.9"
+  "version": "2.0.10"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -978,10 +978,6 @@ var replace_comments_x_esm_replaceComments = function replaceComments(string, re
 
 
 // CONCATENATED MODULE: ./node_modules/is-function-x/dist/is-function-x.esm.js
-var is_function_x_esm_this = undefined;
-
-function is_function_x_esm_newArrowCheck(innerThis, boundThis) { if (innerThis !== boundThis) { throw new TypeError("Cannot instantiate an arrow function"); } }
-
 
 
 
@@ -990,7 +986,6 @@ function is_function_x_esm_newArrowCheck(innerThis, boundThis) { if (innerThis !
 
 
 var FunctionCtr = attempt_x_esm.constructor;
-var castBoolean = true.constructor;
 var is_function_x_esm_SPACE = ' ';
 var fToString = attempt_x_esm.toString;
 var funcTag = '[object Function]';
@@ -998,19 +993,17 @@ var genTag = '[object GeneratorFunction]';
 var asyncTag = '[object AsyncFunction]';
 var ctrRx = /^class /;
 var test = ctrRx.test;
-var hasNativeClass = attempt_x_esm(function () {
-  is_function_x_esm_newArrowCheck(this, is_function_x_esm_this);
-
+var hasNativeClass = attempt_x_esm(function attemptee() {
   /* eslint-disable-next-line babel/new-cap */
   return FunctionCtr('"use strict"; return class My {};')();
-}.bind(undefined)).threw === false;
+}).threw === false;
 
-var testClassstring = function _testClassstring(value) {
+var is_function_x_esm_testClassString = function testClassString(value) {
   return test.call(ctrRx, normalize_space_x_esm(replace_comments_x_esm(fToString.call(value), is_function_x_esm_SPACE)));
 };
 
 var isES6ClassFn = function isES6ClassFunc(value) {
-  var result = attempt_x_esm(testClassstring, value);
+  var result = attempt_x_esm(is_function_x_esm_testClassString, value);
   return result.threw === false && result.value;
 };
 /**
@@ -1031,6 +1024,11 @@ var tryFuncToString = function funcToString(value, allowClass) {
 
   return attempt_x_esm.call(value, fToString).threw === false;
 };
+
+var is_function_x_esm_compareTags = function compareTags(value) {
+  var strTag = to_string_tag_x_esm(value);
+  return strTag === funcTag || strTag === genTag || strTag === asyncTag;
+};
 /**
  * Checks if `value` is classified as a `Function` object.
  *
@@ -1050,12 +1048,11 @@ var is_function_x_esm_isFunction = function isFunction(value, allowClass) {
     return tryFuncToString(value, to_boolean_x_esm(allowClass));
   }
 
-  if (hasNativeClass && castBoolean(allowClass) === false && isES6ClassFn(value)) {
+  if (hasNativeClass && to_boolean_x_esm(allowClass) === false && isES6ClassFn(value)) {
     return false;
   }
 
-  var strTag = to_string_tag_x_esm(value);
-  return strTag === funcTag || strTag === genTag || strTag === asyncTag;
+  return is_function_x_esm_compareTags(value);
 };
 
 /* harmony default export */ var is_function_x_esm = (is_function_x_esm_isFunction);
@@ -1083,39 +1080,36 @@ var to_object_x_esm_toObject = function toObject(value) {
 // CONCATENATED MODULE: ./node_modules/get-prototype-of-x/dist/get-prototype-of-x.esm.js
 
 
-/**
- * This method returns the prototype (i.e. The value of the internal [[Prototype]] property)
- * of the specified object.
- *
- * @function getPrototypeOf
- * @param {*} obj - The object whose prototype is to be returned.
- * @returns {object} The prototype of the given object. If there are no inherited properties, null is returned.
- */
 
-var gpo;
-gpo = {}.getPrototypeOf;
+var ObjectCtr = {}.constructor;
+var nativeGetPrototypeOf = ObjectCtr.getPrototypeOf;
 
-if (gpo) {
+var test1 = function test1() {
+  var prototypeOfCtr = {};
+  /* eslint-disable-next-line lodash/prefer-noop */
+
+  var Ctr = function Ctr() {};
+
+  Ctr.prototype = prototypeOfCtr;
+  var ctr = new Ctr();
+
   try {
-    gpo = gpo(Object) === {}.prototype && gpo;
+    return nativeGetPrototypeOf(ctr) === prototypeOfCtr;
   } catch (ignore) {
-    gpo = null;
+    return false;
   }
-}
+};
 
-if (gpo) {
-  try {
-    gpo(1);
-  } catch (ignore) {
-    /** @type {Function} */
-    var $getPrototypeOf = gpo;
+var isWorking = to_boolean_x_esm(nativeGetPrototypeOf) && test1();
 
-    gpo = function getPrototypeOf(obj) {
-      return $getPrototypeOf(to_object_x_esm(obj));
-    };
-  }
-} else {
-  gpo = function getPrototypeOf(obj) {
+var get_prototype_of_x_esm_patchedGetPrototypeOf = function patchedGetPrototypeOf() {
+  return function getPrototypeOf(obj) {
+    return nativeGetPrototypeOf(to_object_x_esm(obj));
+  };
+};
+
+var get_prototype_of_x_esm_implementation = function implementation() {
+  return function getPrototypeOf(obj) {
     var object = to_object_x_esm(obj);
     /* eslint-disable-next-line no-proto */
 
@@ -1129,47 +1123,90 @@ if (gpo) {
       return object.constructor.prototype;
     }
 
-    if (object instanceof Object) {
-      return Object.prototype;
+    if (object instanceof ObjectCtr) {
+      return ObjectCtr.prototype;
     }
 
     return null;
   };
-}
+};
+/**
+ * This method returns the prototype (i.e. The value of the internal [[Prototype]] property)
+ * of the specified object.
+ *
+ * @function getPrototypeOf
+ * @param {*} obj - The object whose prototype is to be returned.
+ * @returns {object} The prototype of the given object. If there are no inherited properties, null is returned.
+ */
 
-var getPO = gpo;
-/* harmony default export */ var get_prototype_of_x_esm = (getPO);
+var gpo = isWorking ? get_prototype_of_x_esm_patchedGetPrototypeOf() : get_prototype_of_x_esm_implementation();
+/* harmony default export */ var get_prototype_of_x_esm = (gpo);
 
 
 // CONCATENATED MODULE: ./node_modules/is-node-x/dist/is-node-x.esm.js
-/** @type {BooleanConstructor} */
-var is_node_x_esm_castBoolean = true.constructor;
 
-var _ref = function init() {
-  if (typeof document !== 'undefined') {
-    try {
-      var testElement = document.createElement('div');
-      var _hasChildNodesFn = document.hasChildNodes;
-      return {
-        element: document.createElement('div'),
-        hasChildNodes: document.hasChildNodes,
-        documentInheritsNode: typeof _hasChildNodesFn.call(testElement) === 'boolean'
-      };
-    } catch (ignore) {// empty
+
+var doc = typeof document === 'undefined' ? null : document;
+var docHasChildNodes = doc ? doc.hasChildNodes : null;
+var is_node_x_esm_element = doc ? doc.createElement('div') : null;
+
+var is_node_x_esm_getDocInheritsNode = function getDocInheritsNode() {
+  var result = attempt_x_esm(function attemptee() {
+    return docHasChildNodes.call(is_node_x_esm_element);
+  });
+  return result.threw === false && typeof result.value === 'boolean';
+};
+
+var docInheritsNode = is_node_x_esm_getDocInheritsNode();
+var hasChildNodesFn = is_node_x_esm_element && docInheritsNode === false ? is_node_x_esm_element.hasChildNodes : docHasChildNodes;
+
+var is_node_x_esm_shouldTest = function shouldTest(value) {
+  return to_boolean_x_esm(hasChildNodesFn) && to_boolean_x_esm(value) && typeof value.nodeType === 'number';
+};
+
+var is_node_x_esm_hasChildNodes = function hasChildNodes(value) {
+  var result = attempt_x_esm.call(value, hasChildNodesFn);
+
+  if (result.threw === false) {
+    return typeof result.value === 'boolean';
+  }
+
+  return null;
+};
+
+var is_node_x_esm_canAppendChild = function canAppendChild(value) {
+  if (docInheritsNode === false) {
+    var result = attempt_x_esm(function attemptee() {
+      return is_node_x_esm_element.cloneNode(false).appendChild(value);
+    });
+
+    if (result.threw === false) {
+      return to_boolean_x_esm(result.value);
     }
   }
 
-  return {
-    element: null,
-    hasChildNodes: null,
-    documentInheritsNode: false
-  };
-}(),
-    documentInheritsNode = _ref.documentInheritsNode,
-    is_node_x_esm_element = _ref.element,
-    hasChildNodes = _ref.hasChildNodes;
+  return null;
+};
 
-var hasChildNodesFn = is_node_x_esm_element && documentInheritsNode === false ? is_node_x_esm_element.hasChildNodes : hasChildNodes;
+var performTests = function performTests(value) {
+  if (value === document) {
+    return true;
+  }
+
+  var result1 = is_node_x_esm_hasChildNodes(value);
+
+  if (result1 !== null) {
+    return result1;
+  }
+
+  var result2 = is_node_x_esm_canAppendChild(value);
+
+  if (result2 !== null) {
+    return result1;
+  }
+
+  return null;
+};
 /**
  * This method tests if `value` is a DOM Node.
  *
@@ -1177,22 +1214,13 @@ var hasChildNodesFn = is_node_x_esm_element && documentInheritsNode === false ? 
  * @returns {boolean} True if a DOM Node, otherwise false.
  */
 
+
 var isNode = function isNode(value) {
-  if (hasChildNodesFn && value && typeof value.nodeType === 'number') {
-    if (value === document) {
-      return true;
-    }
+  if (is_node_x_esm_shouldTest(value)) {
+    var result = performTests(value);
 
-    try {
-      return typeof hasChildNodesFn.call(value) === 'boolean';
-    } catch (ignore) {// empty
-    }
-
-    if (documentInheritsNode === false) {
-      try {
-        return is_node_x_esm_castBoolean(is_node_x_esm_element.cloneNode(false).appendChild(value));
-      } catch (ignore) {// empty
-      }
+    if (result !== null) {
+      return result;
     }
   }
 
@@ -1222,11 +1250,7 @@ var UNDEFINED = void ZERO;
 var NUMBER = 'number';
 var STRING = 'string';
 var DEFAULT = 'default';
-/** @type {StringConstructor} */
-
 var StringCtr = STRING.constructor;
-/** @type {NumberConstructor} */
-
 var NumberCtr = ZERO.constructor;
 /* eslint-disable-next-line compat/compat */
 
@@ -1237,19 +1261,24 @@ var symValueOf = has_symbol_support_x_esm && Symbol.prototype.valueOf;
 var toStringOrder = ['toString', 'valueOf'];
 var toNumberOrder = ['valueOf', 'toString'];
 var orderLength = 2;
+
+var assertHint = function assertHint(hint) {
+  if (typeof hint !== 'string' || hint !== NUMBER && hint !== STRING) {
+    throw new TypeError('hint must be "string" or "number"');
+  }
+
+  return hint;
+};
 /**
  * @param {*} ordinary - The ordinary to convert.
  * @param {*} hint - The hint.
  * @returns {*} - The primitive.
  */
 
-var ordinaryToPrimitive = function _ordinaryToPrimitive(ordinary, hint) {
+
+var to_primitive_x_esm_ordinaryToPrimitive = function ordinaryToPrimitive(ordinary, hint) {
   require_object_coercible_x_esm(ordinary);
-
-  if (typeof hint !== 'string' || hint !== NUMBER && hint !== STRING) {
-    throw new TypeError('hint must be "string" or "number"');
-  }
-
+  assertHint(hint);
   var methodNames = hint === STRING ? toStringOrder : toNumberOrder;
   var method;
   var result;
@@ -1275,7 +1304,7 @@ var ordinaryToPrimitive = function _ordinaryToPrimitive(ordinary, hint) {
  */
 
 
-var getMethod = function _getMethod(object, property) {
+var to_primitive_x_esm_getMethod = function getMethod(object, property) {
   var func = object[property];
 
   if (is_nil_x_esm(func) === false) {
@@ -1321,7 +1350,7 @@ var getHint = function getHint(value, supplied) {
 var to_primitive_x_esm_getExoticToPrim = function getExoticToPrim(value) {
   if (has_symbol_support_x_esm) {
     if (symToPrimitive) {
-      return getMethod(value, symToPrimitive);
+      return to_primitive_x_esm_getMethod(value, symToPrimitive);
     }
 
     if (is_symbol_default()(value)) {
@@ -1330,6 +1359,24 @@ var to_primitive_x_esm_getExoticToPrim = function getExoticToPrim(value) {
   }
 
   return UNDEFINED;
+};
+
+var to_primitive_x_esm_evalExotic = function evalExotic(obj) {
+  var exoticToPrim = obj.exoticToPrim,
+      input = obj.input,
+      hint = obj.hint;
+  var result = exoticToPrim.call(input, hint);
+
+  if (is_primitive_default()(result)) {
+    return result;
+  }
+
+  throw new TypeError('unable to convert exotic object to primitive');
+};
+
+var to_primitive_x_esm_evalPrimitive = function evalPrimitive(input, hint) {
+  var newHint = hint === DEFAULT && (is_date_object_default()(input) || is_symbol_default()(input)) ? STRING : hint;
+  return to_primitive_x_esm_ordinaryToPrimitive(input, newHint === DEFAULT ? NUMBER : newHint);
 };
 /**
  * This method converts a JavaScript object to a primitive value.
@@ -1341,7 +1388,7 @@ var to_primitive_x_esm_getExoticToPrim = function getExoticToPrim(value) {
  * were String.
  *
  * @param {*} input - The input to convert.
- * @param {NumberConstructor|StringConstructor} [preferredType] - The preferred type (String or Number).
+ * @param {Function} [preferredType] - The preferred type (String or Number).
  * @throws {TypeError} If unable to convert input to a primitive.
  * @returns {string|number} The converted input as a primitive.
  * @see {http://www.ecma-international.org/ecma-262/6.0/#sec-toprimitive}
@@ -1355,19 +1402,11 @@ var to_primitive_x_esm_toPrimitive = function toPrimitive(input, preferredType) 
 
   var hint = getHint(preferredType, arguments.length > ONE);
   var exoticToPrim = to_primitive_x_esm_getExoticToPrim(input);
-
-  if (typeof exoticToPrim !== 'undefined') {
-    var result = exoticToPrim.call(input, hint);
-
-    if (is_primitive_default()(result)) {
-      return result;
-    }
-
-    throw new TypeError('unable to convert exotic object to primitive');
-  }
-
-  var newHint = hint === DEFAULT && (is_date_object_default()(input) || is_symbol_default()(input)) ? STRING : hint;
-  return ordinaryToPrimitive(input, newHint === DEFAULT ? NUMBER : newHint);
+  return typeof exoticToPrim === 'undefined' ? to_primitive_x_esm_evalPrimitive(input, hint) : to_primitive_x_esm_evalExotic({
+    exoticToPrim: exoticToPrim,
+    input: input,
+    hint: hint
+  });
 };
 
 /* harmony default export */ var to_primitive_x_esm = (to_primitive_x_esm_toPrimitive);
@@ -1384,7 +1423,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
  *
  * @param {*} argument - The argument to convert to a property key.
  * @throws {TypeError} If argument is not a symbol and is not coercible to a string.
- * @returns {string|Symbol} The converted argument.
+ * @returns {string|symbol} The converted argument.
  */
 
 var to_property_key_x_esm_toPropertyKey = function toPropertyKey(argument) {
@@ -1406,7 +1445,7 @@ var hop = {}.hasOwnProperty;
  *
  * @param {!object} object - The object to test.
  * @throws {TypeError} If object is null or undefined.
- * @param {string|number|Symbol} property - The name or Symbol of the property to test.
+ * @param {string|number|symbol} property - The name or Symbol of the property to test.
  * @returns {boolean} `true` if the property is set on `object`, else `false`.
  */
 
