@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-08-04T23:51:08.607Z",
+  "date": "2019-08-05T20:50:21.547Z",
   "describe": "",
   "description": "Tests if a value is a plain object.",
   "file": "is-plain-object-x.js",
-  "hash": "c0d98eb19bf38a6a67d1",
+  "hash": "b731049b857bbe1ea94b",
   "license": "MIT",
-  "version": "2.0.10"
+  "version": "2.0.11"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -1102,33 +1102,29 @@ var test1 = function test1() {
 
 var isWorking = to_boolean_x_esm(nativeGetPrototypeOf) && test1();
 
-var get_prototype_of_x_esm_patchedGetPrototypeOf = function patchedGetPrototypeOf() {
-  return function getPrototypeOf(obj) {
-    return nativeGetPrototypeOf(to_object_x_esm(obj));
-  };
+var patchedGetPrototypeOf = function getPrototypeOf(obj) {
+  return nativeGetPrototypeOf(to_object_x_esm(obj));
 };
 
-var get_prototype_of_x_esm_implementation = function implementation() {
-  return function getPrototypeOf(obj) {
-    var object = to_object_x_esm(obj);
-    /* eslint-disable-next-line no-proto */
+var implementation = function getPrototypeOf(obj) {
+  var object = to_object_x_esm(obj);
+  /* eslint-disable-next-line no-proto */
 
-    var proto = object.__proto__;
+  var proto = object.__proto__;
 
-    if (proto || proto === null) {
-      return proto;
-    }
+  if (proto || proto === null) {
+    return proto;
+  }
 
-    if (is_function_x_esm(object.constructor)) {
-      return object.constructor.prototype;
-    }
+  if (is_function_x_esm(object.constructor)) {
+    return object.constructor.prototype;
+  }
 
-    if (object instanceof ObjectCtr) {
-      return ObjectCtr.prototype;
-    }
+  if (object instanceof ObjectCtr) {
+    return ObjectCtr.prototype;
+  }
 
-    return null;
-  };
+  return null;
 };
 /**
  * This method returns the prototype (i.e. The value of the internal [[Prototype]] property)
@@ -1139,7 +1135,7 @@ var get_prototype_of_x_esm_implementation = function implementation() {
  * @returns {object} The prototype of the given object. If there are no inherited properties, null is returned.
  */
 
-var gpo = isWorking ? get_prototype_of_x_esm_patchedGetPrototypeOf() : get_prototype_of_x_esm_implementation();
+var gpo = isWorking ? patchedGetPrototypeOf : implementation;
 /* harmony default export */ var get_prototype_of_x_esm = (gpo);
 
 
