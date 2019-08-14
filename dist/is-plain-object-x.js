@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-08-13T15:59:09.084Z",
+  "date": "2019-08-14T19:54:46.514Z",
   "describe": "",
   "description": "Tests if a value is a plain object.",
   "file": "is-plain-object-x.js",
   "hash": "93bdba0e860776768bf6",
   "license": "MIT",
-  "version": "2.0.11"
+  "version": "2.1.0"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
