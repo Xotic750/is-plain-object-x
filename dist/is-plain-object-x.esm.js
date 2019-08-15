@@ -1,5 +1,5 @@
 import toStringTag from 'to-string-tag-x';
-import isPrimitive from 'is-primitive';
+import isPrimitive from 'is-primitive-x';
 import isArguments from 'is-arguments';
 import getPrototypeOf from 'get-prototype-of-x';
 import isNil from 'is-nil-x';
