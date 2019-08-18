@@ -2,7 +2,7 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-08-17T22:19:14.412Z",
+  "date": "2019-08-18T16:06:33.384Z",
   "describe": "",
   "description": "Tests if a value is a plain object.",
   "file": "is-plain-object-x.js",
