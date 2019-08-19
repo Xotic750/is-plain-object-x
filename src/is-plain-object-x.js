@@ -6,7 +6,9 @@ import isNil from 'is-nil-x';
 import isNode from 'is-node-x';
 import hasOwnProperty from 'has-own-property-x';
 import isPrototypeOf from 'is-prototype-of-x';
+import methodize from 'simple-methodize-x';
 
+const fnToString = methodize(methodize.toString);
 const objectTag = '[object Object]';
 
 const testNode = typeof document !== 'undefined' && toStringTag(document) === objectTag;
@@ -14,10 +16,6 @@ const testArguments = (function getTestArgs() {
   /* eslint-disable-next-line prefer-rest-params */
   return toStringTag(arguments) === objectTag;
 })();
-
-const $isFunctionType = function isFunctionType(value) {
-  return typeof value === 'function';
-};
 
 /**
  * Checks if `value` is a host object in IE < 9.
@@ -32,7 +30,7 @@ if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
   $isHostObject = function isHostObject(value) {
     // Many host objects are `Object` objects that can coerce to strings
     // despite having improperly defined `toString` methods.
-    if (isNil(value) === false && $isFunctionType(value.toString) === false) {
+    if (isNil(value) === false && typeof value.toString === 'function') {
       try {
         return Boolean(String(value));
       } catch (ignore) {
@@ -45,7 +43,7 @@ if (typeof window !== 'undefined' && toStringTag(window) === objectTag) {
 }
 
 const $isObjectObject = function isObjectObject(value) {
-  if (isPrimitive(value) || $isFunctionType(value) || toStringTag(value) !== objectTag) {
+  if (isPrimitive(value) || typeof value === 'function' || toStringTag(value) !== objectTag) {
     return false;
   }
 
@@ -63,7 +61,7 @@ const $isObjectObject = function isObjectObject(value) {
 const $funcToString = function funcToString(value) {
   if (isPrimitive(value) === false) {
     try {
-      return Function.prototype.toString.call(value);
+      return fnToString(value);
     } catch (ignore) {
       // empty
     }
@@ -73,8 +71,8 @@ const $funcToString = function funcToString(value) {
   return void 0;
 };
 
-const objectCtorString = $funcToString(Object);
 const obj = {};
+const objectCtorString = $funcToString(obj.constructor);
 const $isPlainObject = function isPlainObject(value) {
   if ($isObjectObject(value) === false) {
     return false;
@@ -96,7 +94,7 @@ const $isPlainObject = function isPlainObject(value) {
 
   const Ctor = hasOwnProperty(proto, 'constructor') && proto.constructor;
 
-  return $isFunctionType(Ctor) && Ctor instanceof Ctor && $funcToString(Ctor) === objectCtorString;
+  return typeof Ctor === 'function' && Ctor instanceof Ctor && $funcToString(Ctor) === objectCtorString;
 };
 
 /**

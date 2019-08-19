@@ -57,6 +57,7 @@
     "is-node-x": "^2.1.0",
     "is-primitive-x": "^1.0.0",
     "is-prototype-of-x": "^2.1.0",
+    "simple-methodize-x": "^1.0.2",
     "to-string-tag-x": "^2.1.0"
   },
   "devDependencies": {
